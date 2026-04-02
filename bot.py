@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TELEGRAM_TOKEN = os.getenv("8545027661:AAG8S4TyiA6opXKivFwVdpSY5ROLWyqFjnY")
-RAILWAY_URL = os.getenv("RAILWAY_URL")  # Railway дает URL проекта
+RAILWAY_URL = os.getenv("https://railway.com/project/51aa0483-ddf7-49c1-87a7-9504872bb295?")  # Railway дает URL проекта
 PORT = int(os.getenv("PORT", 8080))
 
 print("TOKEN:", TELEGRAM_TOKEN)
