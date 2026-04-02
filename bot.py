@@ -1,32 +1,32 @@
 import os
 from dotenv import load_dotenv
 
-# Загружаем .env
 load_dotenv()
 
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+TELEGRAM_TOKEN = os.getenv("8545027661:AAG8S4TyiA6opXKivFwVdpSY5ROLWyqFjnY")
+RAILWAY_URL = os.getenv("RAILWAY_URL")  # Railway дает URL проекта
+PORT = int(os.getenv("PORT", 8080))
 
 print("TOKEN:", TELEGRAM_TOKEN)
+print("WEBHOOK URL:", RAILWAY_URL)
 
-# 👇 ВАЖНО: импорты ДО функций
+# Telegram imports
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
+# Наши модули
 from openai_api import generate_startup_ideas
 from robokassa import create_payment_link
 
+# -------- COMMAND HANDLERS -------- #
 
-# /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "🚀 Бот работает!\n\nНапиши:\n/ideas AI tools"
     )
 
-
-# /ideas
 async def ideas(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("IDEAS COMMAND RECEIVED")
-
     try:
         text = " ".join(context.args) if context.args else "AI tools"
         print("USER INPUT:", text)
@@ -35,7 +35,6 @@ async def ideas(update: Update, context: ContextTypes.DEFAULT_TYPE):
         print("IDEAS:", ideas_list)
 
         msg = "\n\n".join([f"{i+1}. {idea}" for i, idea in enumerate(ideas_list)])
-
         payment_link = create_payment_link(update.effective_user.id)
 
         await update.message.reply_text(
@@ -47,12 +46,24 @@ async def ideas(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Ошибка при генерации 😢")
 
 
-# запуск
+# -------- START BOT -------- #
+
 def start_bot():
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 
+    # Добавляем хендлеры
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("ideas", ideas))
 
-    print("Bot started...")
-    app.run_polling()
+    # Настройка webhook для Railway
+    webhook_url = f"{RAILWAY_URL}/webhook"
+    print("Setting webhook to:", webhook_url)
+
+    app.run_webhook(
+        listen="0.0.0.0",
+        port=PORT,
+        webhook_url=webhook_url
+    )
+
+if __name__ == "__main__":
+    start_bot()
