@@ -1,3 +1,4 @@
+print("TOKEN:", TELEGRAM_TOKEN)
 from dotenv import load_dotenv
 load_dotenv()
 import os
