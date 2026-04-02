@@ -1,1 +1,28 @@
-# trend-money-ai
+# Trend → Money AI (Россия)
+
+AI-бот для генерации стартап-идей с монетизацией для российской аудитории.
+Принимает подписку через Robokassa.
+
+## Установка
+
+1. Клонируйте репозиторий:
+git clone <URL> && cd trend-money-ai
+
+2. Создайте виртуальное окружение:
+python -m venv venv
+source venv/bin/activate   # Linux/Mac
+venv\Scripts\activate      # Windows
+
+3. Установите зависимости:
+pip install -r requirements.txt
+
+4. Создайте .env на основе .env.example и вставьте свои ключи
+
+## Запуск
+python main.py
+
+В Telegram напишите боту `/ideas AI tools`.
+
+## Подписка через Robokassa
+- Лимит бесплатных идей: 5/день
+- Полный доступ (подписка): 20+ идей
